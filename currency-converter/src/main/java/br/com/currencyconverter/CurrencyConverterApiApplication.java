@@ -1,4 +1,4 @@
-package br.com.soliveira.currencyconverter;
+package br.com.currencyconverter;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

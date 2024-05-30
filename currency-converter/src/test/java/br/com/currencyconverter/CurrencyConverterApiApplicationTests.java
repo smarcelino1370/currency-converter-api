@@ -1,4 +1,4 @@
-package br.com.soliveira.currencyconverter;
+package br.com.currencyconverter;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
