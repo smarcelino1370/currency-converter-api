@@ -19,6 +19,7 @@ import java.net.http.HttpResponse;
 @Service
 public class CurrencyConversionService implements CurrencyConversionDomainService {
 
+    private final HttpClient httpClient;
     private final ExternalApiProperties externalApiProperties;
     private final ObjectMapper objectMapper;
 
@@ -30,15 +31,12 @@ public class CurrencyConversionService implements CurrencyConversionDomainServic
     private ExchangeRateResponse get() {
 
         try {
-
-            HttpClient client = HttpClient.newHttpClient();
-
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI(externalApiProperties.getFullUrl()))
                     .GET()
                     .build();
 
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (HttpStatus.OK.value() != response.statusCode()) {
                 throw new GatewayException(response.body());

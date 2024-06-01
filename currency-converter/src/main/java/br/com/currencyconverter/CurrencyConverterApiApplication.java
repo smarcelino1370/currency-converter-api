@@ -11,8 +11,8 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableConfigurationProperties(ExternalApiProperties.class)
 public class CurrencyConverterApiApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(CurrencyConverterApiApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(CurrencyConverterApiApplication.class, args);
+    }
 
 }

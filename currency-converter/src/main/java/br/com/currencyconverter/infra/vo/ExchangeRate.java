@@ -54,6 +54,22 @@ public class ExchangeRate implements Serializable {
         return Money.of(amount.multiply(this.rate), this.destination);
     }
 
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        ExchangeRate that = (ExchangeRate) object;
+        return Objects.equals(origin, that.origin)
+                && Objects.equals(destination, that.destination)
+                && Objects.equals(rate, that.rate)
+                && Objects.equals(transactionDate, that.transactionDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(origin, destination, rate, transactionDate);
+    }
+
     public static class ExchangeRateBuilder {
 
         private final ExchangeRateResponse exchangeRates;
@@ -77,21 +93,5 @@ public class ExchangeRate implements Serializable {
         public ExchangeRate build() {
             return new ExchangeRate(this);
         }
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-        ExchangeRate that = (ExchangeRate) object;
-        return Objects.equals(origin, that.origin)
-                && Objects.equals(destination, that.destination)
-                && Objects.equals(rate, that.rate)
-                && Objects.equals(transactionDate, that.transactionDate);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(origin, destination, rate, transactionDate);
     }
 }

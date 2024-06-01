@@ -18,14 +18,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ExchangeRateTest {
 
-    private ExchangeRateBuilder builder;
-
     private static final Map<String, BigDecimal> RATES = Map.of(
             "BRL", new BigDecimal("5.6987"),
             "EUR", new BigDecimal("1"),
             "JPY", new BigDecimal("170.61"),
             "USD", new BigDecimal("1.0850")
     );
+    private ExchangeRateBuilder builder;
 
     @BeforeEach
     void beforeEach() {
@@ -93,7 +92,9 @@ class ExchangeRateTest {
 
         ExchangeRateResponse exchangeRateResponse = new ExchangeRateResponse(0L, RATES);
 
-        ExchangeRateBuilder builderWithoutAValidDate = ExchangeRate.builder(exchangeRateResponse);
+        ExchangeRateBuilder builderWithoutAValidDate = ExchangeRate.builder(exchangeRateResponse)
+                .origin(Monetary.getCurrency("BRL"))
+                .destination(Monetary.getCurrency("USD"));
 
         assertThrows(InvalidDateException.class, builderWithoutAValidDate::build);
     }

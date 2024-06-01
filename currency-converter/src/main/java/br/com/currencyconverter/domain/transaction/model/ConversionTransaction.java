@@ -38,12 +38,12 @@ public class ConversionTransaction {
         this.amount = requireNonNull(builder.amount);
     }
 
-    public ExchangeRate getExchangeRate() {
-        return requireNonNull(exchangeRate);
-    }
-
     public static ConversionTransactionBuilder builder() {
         return new ConversionTransactionBuilder();
+    }
+
+    public ExchangeRate getExchangeRate() {
+        return requireNonNull(exchangeRate);
     }
 
     public MonetaryAmount getOriginAmount() {
