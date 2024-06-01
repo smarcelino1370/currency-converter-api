@@ -3,17 +3,18 @@ package br.com.currencyconverter.infra.service;
 import br.com.currencyconverter.domain.transaction.service.CurrencyConversionDomainService;
 import br.com.currencyconverter.infra.exceptionhandler.GatewayException;
 import br.com.currencyconverter.infra.vo.ExchangeRate;
-import br.com.currencyconverter.infra.vo.ExchangeRateResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.money.CurrencyUnit;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
@@ -25,7 +26,13 @@ public class CurrencyConversionService implements CurrencyConversionDomainServic
 
     @Override
     public ExchangeRate handle(CurrencyUnit origin, CurrencyUnit destination) {
-        return ExchangeRate.builder(get()).origin(origin).destination(destination).build();
+        ExchangeRateResponse exchangeRateResponse = get();
+        return ExchangeRate.builder()
+                .timestamp(exchangeRateResponse.timestamp())
+                .rates(exchangeRateResponse.rates())
+                .origin(origin)
+                .destination(destination)
+                .build();
     }
 
     private ExchangeRateResponse get() {
@@ -50,5 +57,8 @@ public class CurrencyConversionService implements CurrencyConversionDomainServic
         } catch (Exception e) {
             throw new GatewayException(e.getMessage());
         }
+    }
+
+    record ExchangeRateResponse(long timestamp, Map<String, BigDecimal> rates) {
     }
 }

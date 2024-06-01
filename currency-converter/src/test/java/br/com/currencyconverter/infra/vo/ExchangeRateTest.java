@@ -1,8 +1,8 @@
 package br.com.currencyconverter.infra.vo;
 
 import br.com.currencyconverter.infra.vo.ExchangeRate.ExchangeRateBuilder;
-import br.com.currencyconverter.infra.vo.ExchangeRateResponse.CurrencyWithoutExchangeRateException;
-import br.com.currencyconverter.infra.vo.ExchangeRateResponse.InvalidDateException;
+import br.com.currencyconverter.infra.vo.ExchangeRate.ExchangeRateBuilder.CurrencyWithoutExchangeRateException;
+import br.com.currencyconverter.infra.vo.ExchangeRate.ExchangeRateBuilder.InvalidDateException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -28,8 +28,9 @@ class ExchangeRateTest {
 
     @BeforeEach
     void beforeEach() {
-        ExchangeRateResponse exchangeRateResponse = new ExchangeRateResponse(1717189194L, RATES);
-        this.builder = ExchangeRate.builder(exchangeRateResponse);
+        this.builder = ExchangeRate.builder()
+                .timestamp(1717189194L)
+                .rates(RATES);
     }
 
     @Test
@@ -90,9 +91,9 @@ class ExchangeRateTest {
     @Test
     void mustThrowExceptionWhenExchangeRateWithoutAValidDate() {
 
-        ExchangeRateResponse exchangeRateResponse = new ExchangeRateResponse(0L, RATES);
-
-        ExchangeRateBuilder builderWithoutAValidDate = ExchangeRate.builder(exchangeRateResponse)
+        ExchangeRateBuilder builderWithoutAValidDate = ExchangeRate.builder()
+                .timestamp(0L)
+                .rates(RATES)
                 .origin(Monetary.getCurrency("BRL"))
                 .destination(Monetary.getCurrency("USD"));
 
