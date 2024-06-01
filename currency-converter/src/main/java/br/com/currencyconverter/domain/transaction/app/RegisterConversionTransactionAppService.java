@@ -6,7 +6,6 @@ import br.com.currencyconverter.domain.transaction.service.CurrencyConversionDom
 import br.com.currencyconverter.domain.transaction.usecase.RegisterConversionTransactionUseCase;
 import br.com.currencyconverter.infra.identifiers.UserId;
 import br.com.currencyconverter.infra.vo.ExchangeRate;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,14 +17,14 @@ public class RegisterConversionTransactionAppService implements RegisterConversi
     private final ConversionTransactionRepository conversionTransactionRepository;
 
     @Override
-    public ConversionTransactionRegistered handle(@Valid RegisterConversionTransaction cmd, UserId userId) {
+    public ConversionTransactionRegistered handle(RegisterConversionTransaction cmd, UserId userId) {
 
-        ExchangeRate exchangeRate = this.currencyConversionDomainService.handle(cmd.origin(), cmd.destination());
+        ExchangeRate exchangeRate = this.currencyConversionDomainService.handle(cmd.getOrigin(), cmd.getDestination());
 
         ConversionTransaction conversionTransaction = ConversionTransaction.builder()
                 .userId(userId)
                 .exchangeRate(exchangeRate)
-                .amount(cmd.amount())
+                .amount(cmd.getAmount())
                 .build();
 
         conversionTransactionRepository.save(conversionTransaction);

@@ -6,6 +6,7 @@ import br.com.currencyconverter.infra.identifiers.UserId;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Value;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
@@ -16,11 +17,18 @@ public interface RegisterConversionTransactionUseCase {
 
     ConversionTransactionRegistered handle(RegisterConversionTransaction cmd, UserId userId);
 
-    record RegisterConversionTransaction(
-            @NotNull(message = "Origin Currency must be informed!") CurrencyUnit origin,
-            @NotNull(message = "Destination Currency must be informed!") CurrencyUnit destination,
-            @NotNull(message = "Amount must be informed!") BigDecimal amount
-    ) {}
+    @Value
+    class RegisterConversionTransaction {
+
+        @NotNull(message = "Origin Currency must be informed!")
+        CurrencyUnit origin;
+
+        @NotNull(message = "Destination Currency must be informed!")
+        CurrencyUnit destination;
+
+        @NotNull(message = "Amount must be informed!")
+        BigDecimal amount;
+    }
 
     @Builder
     @Getter

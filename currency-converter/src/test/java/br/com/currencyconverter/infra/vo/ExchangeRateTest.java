@@ -6,12 +6,10 @@ import br.com.currencyconverter.infra.vo.ExchangeRateResponse.InvalidDateExcepti
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 import javax.money.MonetaryAmount;
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Map;
@@ -22,22 +20,16 @@ class ExchangeRateTest {
 
     private ExchangeRateBuilder builder;
 
-    private static final Map<CurrencyUnit, BigDecimal> RATES = Map.of(
-            Monetary.getCurrency("BRL"), new BigDecimal("5.6987"),
-            Monetary.getCurrency("EUR"), new BigDecimal("1"),
-            Monetary.getCurrency("JPY"), new BigDecimal("170.61"),
-            Monetary.getCurrency("USD"), new BigDecimal("1.0850")
+    private static final Map<String, BigDecimal> RATES = Map.of(
+            "BRL", new BigDecimal("5.6987"),
+            "EUR", new BigDecimal("1"),
+            "JPY", new BigDecimal("170.61"),
+            "USD", new BigDecimal("1.0850")
     );
 
     @BeforeEach
     void beforeEach() {
-        ExchangeRateResponse exchangeRateResponse = new ExchangeRateResponse(
-                true,
-                1717189194L,
-                Monetary.getCurrency("EUR"),
-                LocalDate.of(2024, 5, 31),
-                RATES
-        );
+        ExchangeRateResponse exchangeRateResponse = new ExchangeRateResponse(1717189194L, RATES);
         this.builder = ExchangeRate.builder(exchangeRateResponse);
     }
 
@@ -99,13 +91,7 @@ class ExchangeRateTest {
     @Test
     void mustThrowExceptionWhenExchangeRateWithoutAValidDate() {
 
-        ExchangeRateResponse exchangeRateResponse = new ExchangeRateResponse(
-                true,
-                0L,
-                Monetary.getCurrency("EUR"),
-                LocalDate.of(2024, 5, 31),
-                RATES
-        );
+        ExchangeRateResponse exchangeRateResponse = new ExchangeRateResponse(0L, RATES);
 
         ExchangeRateBuilder builderWithoutAValidDate = ExchangeRate.builder(exchangeRateResponse);
 

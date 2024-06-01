@@ -1,18 +1,26 @@
 package br.com.currencyconverter.infra.service;
 
 import br.com.currencyconverter.domain.transaction.service.CurrencyConversionDomainService;
+import br.com.currencyconverter.infra.exceptionhandler.GatewayException;
 import br.com.currencyconverter.infra.vo.ExchangeRate;
 import br.com.currencyconverter.infra.vo.ExchangeRateResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.money.CurrencyUnit;
-import javax.money.Monetary;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Map;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
+@RequiredArgsConstructor
 @Service
 public class CurrencyConversionService implements CurrencyConversionDomainService {
+
+    private final ExternalApiProperties externalApiProperties;
+    private final ObjectMapper objectMapper;
 
     @Override
     public ExchangeRate handle(CurrencyUnit origin, CurrencyUnit destination) {
@@ -20,14 +28,29 @@ public class CurrencyConversionService implements CurrencyConversionDomainServic
     }
 
     private ExchangeRateResponse get() {
-        //TODO: Implementar Lógica de Recuperar de Serviço Externo
-        Map<CurrencyUnit, BigDecimal> rates = Map.of(
-                Monetary.getCurrency("BRL"), new BigDecimal("5.6987"),
-                Monetary.getCurrency("EUR"), new BigDecimal("1"),
-                Monetary.getCurrency("JPY"), new BigDecimal("170.61"),
-                Monetary.getCurrency("USD"), new BigDecimal("1.0850")
-        );
 
-        return new ExchangeRateResponse(true, 1717189194L, Monetary.getCurrency("EUR"), LocalDate.now(), rates);
+        try {
+
+            HttpClient client = HttpClient.newHttpClient();
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(new URI(externalApiProperties.getFullUrl()))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (HttpStatus.OK.value() != response.statusCode()) {
+                throw new GatewayException(response.body());
+            }
+
+            return objectMapper.readValue(response.body(), ExchangeRateResponse.class);
+
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new GatewayException(e.getMessage());
+        } catch (Exception e) {
+            throw new GatewayException(e.getMessage());
+        }
     }
 }

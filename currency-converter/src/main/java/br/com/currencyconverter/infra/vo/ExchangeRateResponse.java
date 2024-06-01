@@ -1,13 +1,14 @@
 package br.com.currencyconverter.infra.vo;
 
 import br.com.currencyconverter.infra.exceptionhandler.GatewayException;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.money.CurrencyUnit;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Map;
@@ -15,22 +16,28 @@ import java.util.Map;
 import static java.util.Objects.isNull;
 import static org.springframework.http.HttpStatus.BAD_GATEWAY;
 
-public record ExchangeRateResponse(
-        boolean success,
-        long timestamp,
-        CurrencyUnit base,
-        LocalDate date,
-        Map<CurrencyUnit, BigDecimal> rates
-) {
+public final class ExchangeRateResponse {
+    private final long timestamp;
+    private final Map<String, BigDecimal> rates;
+
+    @JsonCreator
+    public ExchangeRateResponse(
+            @JsonProperty("timestamp") long timestamp,
+            @JsonProperty("rates") Map<String, BigDecimal> rates
+    ) {
+        this.timestamp = timestamp;
+        this.rates = rates;
+    }
+
     public BigDecimal getRate(CurrencyUnit origin, CurrencyUnit destination) {
 
-        BigDecimal destinationRate = rates.get(destination);
+        BigDecimal destinationRate = rates.get(destination.getCurrencyCode());
 
         if (isNull(destinationRate)) {
             throw new CurrencyWithoutExchangeRateException(destination.getCurrencyCode());
         }
 
-        BigDecimal originRate = rates.get(origin);
+        BigDecimal originRate = rates.get(origin.getCurrencyCode());
 
         if (isNull(originRate)) {
             throw new CurrencyWithoutExchangeRateException(origin.getCurrencyCode());
@@ -39,7 +46,7 @@ public record ExchangeRateResponse(
     }
 
     public LocalDateTime getLocalDateTime() {
-        if(timestamp == 0L){
+        if (timestamp == 0L) {
             throw new InvalidDateException();
         }
         Instant instant = Instant.ofEpochSecond(timestamp);

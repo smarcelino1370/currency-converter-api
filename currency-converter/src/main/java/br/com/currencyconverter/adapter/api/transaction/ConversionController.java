@@ -4,6 +4,7 @@ import br.com.currencyconverter.domain.transaction.usecase.RegisterConversionTra
 import br.com.currencyconverter.domain.transaction.usecase.RegisterConversionTransactionUseCase.ConversionTransactionRegistered;
 import br.com.currencyconverter.domain.transaction.usecase.RegisterConversionTransactionUseCase.RegisterConversionTransaction;
 import br.com.currencyconverter.infra.identifiers.UserId;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class ConversionController {
 
     @PostMapping("/convert/{userId}")
     public ResponseEntity<ConversionTransactionRegistered> convert(
-            @RequestBody RegisterConversionTransaction cmd,
+            @RequestBody @Valid RegisterConversionTransaction cmd,
             @PathVariable UserId userId
     ) {
         ConversionTransactionRegistered registered = this.registerConversionTransactionUseCase.handle(cmd, userId);

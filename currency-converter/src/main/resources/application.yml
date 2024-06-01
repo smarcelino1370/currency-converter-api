@@ -15,3 +15,8 @@ spring:
     console:
       enabled: true
     path: /h2-ui
+
+externalapi:
+  url: http://api.exchangeratesapi.io/latest
+  accesskey: 5ab0486cd776956b41b3b625ce5148e9
+  base: EUR
