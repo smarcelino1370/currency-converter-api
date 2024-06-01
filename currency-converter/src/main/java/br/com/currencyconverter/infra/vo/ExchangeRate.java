@@ -78,6 +78,16 @@ public class ExchangeRate implements Serializable {
         return Objects.hash(origin, destination, rate, transactionDate);
     }
 
+    @Override
+    public String toString() {
+        return "ExchangeRate{" +
+                "origin=" + origin +
+                ", destination=" + destination +
+                ", rate=" + rate +
+                ", transactionDate=" + transactionDate +
+                '}';
+    }
+
     public static class ExchangeRateBuilder {
 
         private Map<String, BigDecimal> rates;

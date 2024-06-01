@@ -5,6 +5,7 @@ import br.com.currencyconverter.infra.exceptionhandler.GatewayException;
 import br.com.currencyconverter.infra.vo.ExchangeRate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Map;
 
+@Log4j2
 @RequiredArgsConstructor
 @Service
 public class CurrencyConversionService implements CurrencyConversionDomainService {
@@ -26,6 +28,7 @@ public class CurrencyConversionService implements CurrencyConversionDomainServic
 
     @Override
     public ExchangeRate handle(CurrencyUnit origin, CurrencyUnit destination) {
+        log.info("calling handle(CurrencyUnit, CurrencyUnit) - {} {}", origin, destination);
         ExchangeRateResponse exchangeRateResponse = get();
         return ExchangeRate.builder()
                 .timestamp(exchangeRateResponse.timestamp())
@@ -37,6 +40,7 @@ public class CurrencyConversionService implements CurrencyConversionDomainServic
 
     private ExchangeRateResponse get() {
 
+        log.info("calling get()");
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI(externalApiProperties.getFullUrl()))
@@ -46,15 +50,19 @@ public class CurrencyConversionService implements CurrencyConversionDomainServic
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (HttpStatus.OK.value() != response.statusCode()) {
+                log.error("error: status code is not OK: statusCode [{}]", response.statusCode());
+                log.error("throwing {}", response.body());
                 throw new GatewayException(response.body());
             }
 
             return objectMapper.readValue(response.body(), ExchangeRateResponse.class);
 
         } catch (InterruptedException e) {
+            log.error("throwing ", e);
             Thread.currentThread().interrupt();
             throw new GatewayException(e.getMessage());
         } catch (Exception e) {
+            log.error("throwing ", e);
             throw new GatewayException(e.getMessage());
         }
     }

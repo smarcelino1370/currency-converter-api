@@ -6,10 +6,12 @@ import br.com.currencyconverter.infra.vo.ExchangeRate;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 import javax.money.MonetaryAmount;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 import static lombok.AccessLevel.PRIVATE;
@@ -60,5 +62,28 @@ public class ConversionTransaction {
 
     public LocalDateTime getTransactionDate() {
         return this.getExchangeRate().getTransactionDate();
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        ConversionTransaction that = (ConversionTransaction) object;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
+
+    @Override
+    public String toString() {
+        return "ConversionTransaction{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", exchangeRate=" + exchangeRate +
+                ", amount=" + amount +
+                '}';
     }
 }

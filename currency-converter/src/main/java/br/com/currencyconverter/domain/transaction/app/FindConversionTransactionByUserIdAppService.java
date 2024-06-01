@@ -5,10 +5,12 @@ import br.com.currencyconverter.domain.transaction.repository.ConversionTransact
 import br.com.currencyconverter.domain.transaction.usecase.FindConversionTransactionByUserIdUseCase;
 import br.com.currencyconverter.infra.identifiers.UserId;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Log4j2
 @RequiredArgsConstructor
 @Service
 public class FindConversionTransactionByUserIdAppService implements FindConversionTransactionByUserIdUseCase {
@@ -16,6 +18,7 @@ public class FindConversionTransactionByUserIdAppService implements FindConversi
 
     @Override
     public List<ConversionTransactionFinded> find(UserId userId) {
+        log.info("calling find(UserId) - {}", userId);
         List<ConversionTransaction> transactions = conversionTransactionRepository.findByUserId(userId);
 
         return transactions.stream()
