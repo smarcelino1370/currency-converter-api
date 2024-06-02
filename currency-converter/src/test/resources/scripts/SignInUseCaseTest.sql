@@ -1,0 +1,2 @@
+INSERT INTO users (id, username, password) VALUES ('a8245833-b413-4976-a890-e5a0c78dc5b9', 'it', '83cb40d1beaba8036da4c2cf2e62fd8d54557afb1c136f281eb27e1086519bf31c7de995b0211e34');
+INSERT INTO user_role (id, user_id, role) VALUES ('53893e29-e6b9-46fb-a57f-9f3ececbf8b0', 'a8245833-b413-4976-a890-e5a0c78dc5b9', 'ADMIN');

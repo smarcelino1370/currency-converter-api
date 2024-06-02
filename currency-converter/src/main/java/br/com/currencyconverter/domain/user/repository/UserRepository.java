@@ -16,4 +16,10 @@ public interface UserRepository extends Repository<User, UserId> {
     }
 
     Optional<User> findByUsername(String username);
+
+    default User get(UserId userId) {
+        return findById(userId).orElseThrow(userId::notFoundException);
+    }
+
+    Optional<User> findById(UserId userId);
 }

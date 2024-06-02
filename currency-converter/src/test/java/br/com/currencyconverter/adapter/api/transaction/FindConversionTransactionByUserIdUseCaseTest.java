@@ -1,4 +1,4 @@
-package br.com.currencyconverter.domain.transaction.usecase;
+package br.com.currencyconverter.adapter.api.transaction;
 
 import br.com.currencyconverter.util.IntegrationTest;
 import org.junit.jupiter.api.Test;
@@ -24,16 +24,24 @@ class FindConversionTransactionByUserIdUseCaseTest {
     void mustFindAllTransactionByUserId() throws Exception {
 
 
-        mockMvc.perform(get("/api/v1/conversion/b321eced-41fd-487f-b73c-bba6291644da")
+        mockMvc.perform(get("/api/v1/conversion/a8245833-b413-4976-a890-e5a0c78dc5b9")
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(12)))
                 .andExpect(jsonPath("$[0].id", is("bd5c8763-d6cb-4892-8617-b76881d453fd")))
-                .andExpect(jsonPath("$[0].userId", is("b321eced-41fd-487f-b73c-bba6291644da")))
+                .andExpect(jsonPath("$[0].userId", is("a8245833-b413-4976-a890-e5a0c78dc5b9")))
                 .andExpect(jsonPath("$[0].origin.currency", is("BRL")))
                 .andExpect(jsonPath("$[0].origin.amount", is(100.00)))
                 .andExpect(jsonPath("$[0].destination.currency", is("EUR")))
                 .andExpect(jsonPath("$[0].destination.amount", is(18.0000)))
                 .andExpect(jsonPath("$[0].rate", is(0.180000)));
+    }
+
+    @Test
+    void mustThrowWhenInvalidUserId() throws Exception {
+
+        mockMvc.perform(get("/api/v1/conversion/b321eced-41fd-487f-b73c-bba6291644da")
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 }

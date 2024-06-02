@@ -12,18 +12,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Optional.ofNullable;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 @RequiredArgsConstructor
 @Service
@@ -74,7 +72,7 @@ public class JwtTokenProvider {
     }
 
     public Optional<String> resolveToken(HttpServletRequest request) {
-        return Optional.ofNullable(request.getHeader(AUTHORIZATION))
+        return ofNullable(request.getHeader(AUTHORIZATION))
                 .map(bearerToken -> bearerToken.substring("Bearer ".length()));
     }
 
@@ -83,7 +81,7 @@ public class JwtTokenProvider {
             DecodedJWT decodedJWT = decodedToken(token);
             return !decodedJWT.getExpiresAt().before(new Date());
         } catch (Exception e) {
-            throw new InvalidJWTAuthenticationException("Expired or invalid JWT token");
+            return false;
         }
     }
 
@@ -91,12 +89,5 @@ public class JwtTokenProvider {
         Algorithm algorithm = Algorithm.HMAC256(securityProperties.getSecretKey().getBytes());
         JWTVerifier verifier = JWT.require(algorithm).build();
         return verifier.verify(token);
-    }
-
-    @ResponseStatus(FORBIDDEN)
-    public static class InvalidJWTAuthenticationException extends AuthenticationException {
-        public InvalidJWTAuthenticationException(String ex) {
-            super(ex);
-        }
     }
 }

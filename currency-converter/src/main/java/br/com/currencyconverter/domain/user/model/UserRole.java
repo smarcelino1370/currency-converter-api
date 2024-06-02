@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Objects;
+import java.util.StringJoiner;
 
 import static jakarta.persistence.EnumType.STRING;
 import static java.util.Objects.requireNonNull;
@@ -55,9 +56,9 @@ public class UserRole implements GrantedAuthority {
 
     @Override
     public String toString() {
-        return "UserRole{" +
-                "id=" + id +
-                ", role=" + role +
-                '}';
+        return new StringJoiner(", ", UserRole.class.getSimpleName() + "[", "]")
+                .add("id=" + id)
+                .add("role=" + role)
+                .toString();
     }
 }

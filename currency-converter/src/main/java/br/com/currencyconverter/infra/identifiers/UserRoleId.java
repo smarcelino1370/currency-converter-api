@@ -6,21 +6,18 @@ import jakarta.persistence.Embeddable;
 import lombok.Getter;
 
 import java.io.Serial;
-import java.io.Serializable;
 import java.util.Objects;
+import java.util.StringJoiner;
 import java.util.UUID;
 
-import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 
 @Getter
 @Embeddable
-public class UserRoleId implements Serializable {
+public class UserRoleId extends WrapperId<UUID> {
 
     @Serial
     private static final long serialVersionUID = -1558964573399317176L;
-
-    public static final String ATTRIBUTE = "id";
 
     @JsonValue
     private final UUID id;
@@ -38,8 +35,8 @@ public class UserRoleId implements Serializable {
     }
 
     @JsonCreator
-    public static UserRoleId from(UUID id) {
-        return new UserRoleId(id);
+    public static UserRoleId from(String id) {
+        return new UserRoleId(UUID.fromString(id));
     }
 
     @Override
@@ -57,6 +54,8 @@ public class UserRoleId implements Serializable {
 
     @Override
     public String toString() {
-        return isNull(id) ? null : id.toString();
+        return new StringJoiner(", ", UserRoleId.class.getSimpleName() + "[", "]")
+                .add("id=" + id)
+                .toString();
     }
 }

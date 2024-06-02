@@ -15,7 +15,7 @@ public interface SignInUseCase {
 
         @NotBlank(message = "Username must be informed!")
         String username;
-        @NotNull(message = "Password must be informed!")
+        @NotBlank(message = "Password must be informed!")
         String password;
 
         public UsernamePasswordAuthenticationToken authentication() {

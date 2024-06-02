@@ -1,7 +1,7 @@
 package br.com.currencyconverter.infra.exceptionhandler;
 
-import br.com.currencyconverter.infra.provider.security.JwtTokenProvider.InvalidJWTAuthenticationException;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -60,10 +60,11 @@ public class ValidationErrorHandlers {
                 .build();
     }
 
-    @ResponseStatus(BAD_REQUEST)
-    @ExceptionHandler(BusinessException.class)
-    public ApiErrorResponse handleBusinessException(BusinessException exception) {
+    @ResponseStatus(NOT_FOUND)
+    @ExceptionHandler(NotFoundException.class)
+    public ApiErrorResponse handleBusinessException(NotFoundException exception) {
         return ApiErrorResponse.builder()
+                .message("Record not found!")
                 .message(exception.getMessage())
                 .build();
     }
@@ -77,22 +78,22 @@ public class ValidationErrorHandlers {
                 .build();
     }
 
-    @ResponseStatus(FORBIDDEN)
-    @ExceptionHandler(InvalidJWTAuthenticationException.class)
-    public ApiErrorResponse handleInvalidJWTAuthenticationException(InvalidJWTAuthenticationException exception) {
-
-        return ApiErrorResponse.builder()
-                .message("Failed when authenticate!")
-                .detailedMessage(exception.getMessage())
-                .build();
-    }
-
     @ResponseStatus(NOT_FOUND)
     @ExceptionHandler(UsernameNotFoundException.class)
     public ApiErrorResponse handleUsernameNotFoundException(UsernameNotFoundException exception) {
 
         return ApiErrorResponse.builder()
                 .message("User not found!")
+                .detailedMessage(exception.getMessage())
+                .build();
+    }
+
+    @ResponseStatus(FORBIDDEN)
+    @ExceptionHandler(BadCredentialsException.class)
+    public ApiErrorResponse handleBadCredentialsException(BadCredentialsException exception) {
+
+        return ApiErrorResponse.builder()
+                .message("Failed to authenticate user!")
                 .detailedMessage(exception.getMessage())
                 .build();
     }

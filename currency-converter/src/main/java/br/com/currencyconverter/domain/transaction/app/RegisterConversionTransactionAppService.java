@@ -4,6 +4,8 @@ import br.com.currencyconverter.domain.transaction.model.ConversionTransaction;
 import br.com.currencyconverter.domain.transaction.repository.ConversionTransactionRepository;
 import br.com.currencyconverter.domain.transaction.service.CurrencyConversionDomainService;
 import br.com.currencyconverter.domain.transaction.usecase.RegisterConversionTransactionUseCase;
+import br.com.currencyconverter.domain.user.model.User;
+import br.com.currencyconverter.domain.user.repository.UserRepository;
 import br.com.currencyconverter.infra.identifiers.UserId;
 import br.com.currencyconverter.infra.vo.ExchangeRate;
 import lombok.RequiredArgsConstructor;
@@ -17,16 +19,18 @@ public class RegisterConversionTransactionAppService implements RegisterConversi
 
     private final CurrencyConversionDomainService currencyConversionDomainService;
     private final ConversionTransactionRepository conversionTransactionRepository;
+    private final UserRepository userRepository;
 
     @Override
     public ConversionTransactionRegistered handle(RegisterConversionTransaction cmd, UserId userId) {
 
         log.info("calling handle(RegisterConversionTransaction, UserId) for UserId {}", userId);
 
+        User user = userRepository.get(userId);
         ExchangeRate exchangeRate = this.currencyConversionDomainService.handle(cmd.getOrigin(), cmd.getDestination());
 
         ConversionTransaction conversionTransaction = ConversionTransaction.builder()
-                .userId(userId)
+                .userId(user.getId())
                 .exchangeRate(exchangeRate)
                 .amount(cmd.getAmount())
                 .build();

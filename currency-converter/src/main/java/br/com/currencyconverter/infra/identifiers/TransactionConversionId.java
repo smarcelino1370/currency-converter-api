@@ -5,17 +5,19 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.Embeddable;
 import lombok.Getter;
 
+import java.io.Serial;
 import java.util.Objects;
+import java.util.StringJoiner;
 import java.util.UUID;
 
-import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 
 @Getter
 @Embeddable
-public class TransactionConversionId {
+public class TransactionConversionId extends WrapperId<UUID> {
 
-    public static final String ATTRIBUTE = "id";
+    @Serial
+    private static final long serialVersionUID = 7539620175259666485L;
 
     @JsonValue
     private final UUID id;
@@ -33,8 +35,8 @@ public class TransactionConversionId {
     }
 
     @JsonCreator
-    public static TransactionConversionId from(UUID id) {
-        return new TransactionConversionId(id);
+    public static TransactionConversionId from(String id) {
+        return new TransactionConversionId(UUID.fromString(id));
     }
 
     @Override
@@ -52,7 +54,8 @@ public class TransactionConversionId {
 
     @Override
     public String toString() {
-        return isNull(id) ? null : id.toString();
+        return new StringJoiner(", ", TransactionConversionId.class.getSimpleName() + "[", "]")
+                .add("id=" + id)
+                .toString();
     }
-
 }

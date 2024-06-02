@@ -2,6 +2,7 @@ package br.com.currencyconverter.util;
 
 import br.com.currencyconverter.infra.provider.currencyconversion.CurrencyConversionProvider;
 import br.com.currencyconverter.infra.provider.currencyconversion.ExternalApiProperties;
+import br.com.currencyconverter.infra.provider.security.SecurityProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -21,7 +22,6 @@ import static org.mockito.Mockito.mock;
 @Configuration
 class CurrencyConverterTestConfiguration {
 
-
     private final static String RESULT = """
             {
                 "success": true,
@@ -40,21 +40,15 @@ class CurrencyConverterTestConfiguration {
     @Mock
     private HttpClient httpClient;
 
-    @Mock
-    private ExternalApiProperties externalApiProperties;
-
     @Autowired
     private ObjectMapper objectMapper;
-
 
     @Primary
     @Bean
     CurrencyConversionProvider currencyConversionService() throws IOException, InterruptedException {
         MockitoAnnotations.openMocks(this);
 
-        CurrencyConversionProvider currencyConversionProvider = new CurrencyConversionProvider(httpClient, externalApiProperties, objectMapper);
-
-        doReturn("http://api.mock.io?access_key=mock&base=EUR").when(externalApiProperties).getFullUrl();
+        CurrencyConversionProvider currencyConversionProvider = new CurrencyConversionProvider(httpClient, externalApiProperties(), objectMapper);
 
         HttpResponse<?> response = mock(HttpResponse.class);
         doReturn(200).when(response).statusCode();
@@ -63,6 +57,16 @@ class CurrencyConverterTestConfiguration {
         doReturn(response).when(httpClient).send(any(), any());
 
         return currencyConversionProvider;
+    }
+
+    @Bean
+    public SecurityProperties securityProperties(){
+        return new SecurityProperties("53cr37", 3600000L);
+    }
+
+    @Bean
+    public ExternalApiProperties externalApiProperties(){
+        return new ExternalApiProperties("http://api.mock.io", "mock", "EUR");
     }
 
 }

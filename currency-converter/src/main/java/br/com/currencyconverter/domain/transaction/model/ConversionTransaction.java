@@ -12,6 +12,7 @@ import javax.money.MonetaryAmount;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.StringJoiner;
 
 import static java.util.Objects.requireNonNull;
 import static lombok.AccessLevel.PRIVATE;
@@ -79,11 +80,11 @@ public class ConversionTransaction {
 
     @Override
     public String toString() {
-        return "ConversionTransaction{" +
-                "id=" + id +
-                ", userId=" + userId +
-                ", exchangeRate=" + exchangeRate +
-                ", amount=" + amount +
-                '}';
+        return new StringJoiner(", ", ConversionTransaction.class.getSimpleName() + "[", "]")
+                .add("id=" + id)
+                .add("userId=" + userId)
+                .add("exchangeRate=" + exchangeRate)
+                .add("amount=" + amount)
+                .toString();
     }
 }

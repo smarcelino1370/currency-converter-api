@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Map;
 import java.util.Objects;
+import java.util.StringJoiner;
 
 import static java.math.RoundingMode.HALF_EVEN;
 import static java.util.Objects.isNull;
@@ -80,12 +81,12 @@ public class ExchangeRate implements Serializable {
 
     @Override
     public String toString() {
-        return "ExchangeRate{" +
-                "origin=" + origin +
-                ", destination=" + destination +
-                ", rate=" + rate +
-                ", transactionDate=" + transactionDate +
-                '}';
+        return new StringJoiner(", ", ExchangeRate.class.getSimpleName() + "[", "]")
+                .add("origin=" + origin)
+                .add("destination=" + destination)
+                .add("rate=" + rate)
+                .add("transactionDate=" + transactionDate)
+                .toString();
     }
 
     public static class ExchangeRateBuilder {

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
+import java.util.StringJoiner;
 
 import static java.util.Objects.requireNonNull;
 import static lombok.AccessLevel.PRIVATE;
@@ -29,6 +30,17 @@ public class Token {
 
     public static TokenBuilder builder() {
         return new TokenBuilder();
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", Token.class.getSimpleName() + "[", "]")
+                .add("username='" + username + "'")
+                .add("authenticated=" + authenticated)
+                .add("created=" + created)
+                .add("expiresAt=" + expiresAt)
+                .add("accessToken='" + accessToken + "'")
+                .toString();
     }
 
     @NoArgsConstructor(access = PRIVATE)
