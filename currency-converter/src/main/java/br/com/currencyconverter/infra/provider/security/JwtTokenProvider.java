@@ -51,8 +51,7 @@ public class JwtTokenProvider {
                 .toUriString();
 
         List<String> roles = authorities.stream()
-                .map(UserRole::getRole)
-                .map(Enum::name)
+                .map(UserRole::getAuthority)
                 .toList();
 
         return JWT.create()

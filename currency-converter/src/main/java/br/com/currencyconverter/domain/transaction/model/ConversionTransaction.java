@@ -2,11 +2,11 @@ package br.com.currencyconverter.domain.transaction.model;
 
 import br.com.currencyconverter.infra.identifiers.TransactionConversionId;
 import br.com.currencyconverter.infra.identifiers.UserId;
+import br.com.currencyconverter.infra.identifiers.WrapperId;
 import br.com.currencyconverter.infra.vo.ExchangeRate;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 
 import javax.money.MonetaryAmount;
 import java.math.BigDecimal;
@@ -24,10 +24,10 @@ import static lombok.AccessLevel.PRIVATE;
 public class ConversionTransaction {
 
     @EmbeddedId
-    @AttributeOverride(name = TransactionConversionId.ATTRIBUTE, column = @Column(name = "id"))
+    @AttributeOverride(name = WrapperId.ATTRIBUTE, column = @Column(name = "id"))
     private final TransactionConversionId id;
 
-    @AttributeOverride(name = UserId.ATTRIBUTE, column = @Column(name = "user_id"))
+    @AttributeOverride(name = WrapperId.ATTRIBUTE, column = @Column(name = "user_id"))
     private final UserId userId;
 
     private final ExchangeRate exchangeRate;

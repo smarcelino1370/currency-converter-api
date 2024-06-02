@@ -2,7 +2,6 @@ package br.com.currencyconverter.domain.user.usecase;
 
 import br.com.currencyconverter.infra.vo.Token;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 

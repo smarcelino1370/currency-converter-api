@@ -10,7 +10,6 @@ import java.io.Serial;
 import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.UUID;
-import java.util.function.Supplier;
 
 import static java.util.Objects.requireNonNull;
 
