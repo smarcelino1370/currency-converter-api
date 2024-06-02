@@ -20,6 +20,7 @@ public class SignInAppService implements SignInUseCase {
 
     @Override
     public Token handle(SignIn cmd) {
+        log.info("calling handle(SignIn)");
         Authentication authentication = authenticationManager.authenticate(cmd.authentication());
         User user = (User) authentication.getPrincipal();
         return jwtTokenProvider.create(user);

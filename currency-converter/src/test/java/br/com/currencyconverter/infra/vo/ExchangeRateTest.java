@@ -4,6 +4,7 @@ import br.com.currencyconverter.infra.vo.ExchangeRate.ExchangeRateBuilder;
 import br.com.currencyconverter.infra.vo.ExchangeRate.ExchangeRateBuilder.CurrencyWithoutExchangeRateException;
 import br.com.currencyconverter.infra.vo.ExchangeRate.ExchangeRateBuilder.InvalidDateException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import javax.money.Monetary;
@@ -16,6 +17,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Tag("ut")
 class ExchangeRateTest {
 
     private static final Map<String, BigDecimal> RATES = Map.of(

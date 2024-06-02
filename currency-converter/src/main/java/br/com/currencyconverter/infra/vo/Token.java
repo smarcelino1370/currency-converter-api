@@ -3,6 +3,8 @@ package br.com.currencyconverter.infra.vo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Date;
 
 import static java.util.Objects.requireNonNull;
@@ -12,9 +14,9 @@ import static lombok.AccessLevel.PRIVATE;
 public class Token {
 
     private final String username;
-    private final Boolean authenticated;
-    private final Date created;
-    private final Date expiresAt;
+    private final boolean authenticated;
+    private final LocalDateTime created;
+    private final LocalDateTime expiresAt;
     private final String accessToken;
 
     private Token(TokenBuilder builder) {
@@ -34,8 +36,8 @@ public class Token {
 
         private String username;
         private boolean authenticated = false;
-        private Date created;
-        private Date expiresAt;
+        private LocalDateTime created;
+        private LocalDateTime expiresAt;
         private String accessToken;
 
 
@@ -55,12 +57,16 @@ public class Token {
         }
 
         public TokenBuilder created(Date created) {
-            this.created = created;
+            this.created = requireNonNull(created).toInstant()
+                    .atZone(ZoneOffset.UTC)
+                    .toLocalDateTime();
             return this;
         }
 
         public TokenBuilder expiresAt(Date expiresAt) {
-            this.expiresAt = expiresAt;
+            this.expiresAt = requireNonNull(expiresAt).toInstant()
+                    .atZone(ZoneOffset.UTC)
+                    .toLocalDateTime();
             return this;
         }
 

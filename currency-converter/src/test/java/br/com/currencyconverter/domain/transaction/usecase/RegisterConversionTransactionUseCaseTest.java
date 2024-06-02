@@ -2,8 +2,12 @@ package br.com.currencyconverter.domain.transaction.usecase;
 
 import br.com.currencyconverter.util.IntegrationTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.List;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -17,6 +21,29 @@ class RegisterConversionTransactionUseCaseTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    private static List<String> contents(){
+        return List.of(
+                """
+                {
+                    "amount": 99.99,
+                    "destination": "USD"
+                }
+                """,
+                """
+                {
+                    "origin": "BRL",
+                    "destination": "USD"
+                }
+                """,
+                """
+                {
+                    "origin": "BRL",
+                    "amount": 99.99
+                }
+                """
+        );
+    }
 
     @Test
     void mustRegisterANewTransactionConversion() throws Exception {
@@ -40,5 +67,14 @@ class RegisterConversionTransactionUseCaseTest {
                 .andExpect(jsonPath("$.destination.amount", is(19.06059375)))
                 .andExpect(jsonPath("$.rate", is(0.190625)))
                 .andExpect(jsonPath("$.transactionDate", notNullValue()));
+    }
+
+    @ParameterizedTest
+    @MethodSource("contents")
+    void mustThrowExceptionWhenContentIncomplete(String content) throws Exception {
+
+        mockMvc.perform(post("/api/v1/conversion/convert/b321eced-41fd-487f-b73c-bba6291644da")
+                        .content(content).contentType(APPLICATION_JSON))
+                .andExpect(status().isUnprocessableEntity());
     }
 }
