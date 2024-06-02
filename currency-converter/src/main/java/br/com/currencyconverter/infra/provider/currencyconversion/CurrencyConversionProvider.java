@@ -1,4 +1,4 @@
-package br.com.currencyconverter.infra.service;
+package br.com.currencyconverter.infra.provider.currencyconversion;
 
 import br.com.currencyconverter.domain.transaction.service.CurrencyConversionDomainService;
 import br.com.currencyconverter.infra.exceptionhandler.GatewayException;
@@ -20,7 +20,7 @@ import java.util.Map;
 @Log4j2
 @RequiredArgsConstructor
 @Service
-public class CurrencyConversionService implements CurrencyConversionDomainService {
+public class CurrencyConversionProvider implements CurrencyConversionDomainService {
 
     private final HttpClient httpClient;
     private final ExternalApiProperties externalApiProperties;

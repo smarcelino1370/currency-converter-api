@@ -16,10 +16,10 @@ import java.util.Objects;
 import static java.util.Objects.requireNonNull;
 import static lombok.AccessLevel.PRIVATE;
 
-@Entity
-@Table(name = "conversion_transaction")
 @Getter
 @NoArgsConstructor(access = PRIVATE, force = true)
+@Entity
+@Table(name = "conversion_transaction")
 public class ConversionTransaction {
 
     @EmbeddedId

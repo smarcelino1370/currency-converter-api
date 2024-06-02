@@ -1,4 +1,4 @@
-package br.com.currencyconverter.infra.service;
+package br.com.currencyconverter.infra.provider.currencyconversion;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,8 @@
 package br.com.currencyconverter.infra.exceptionhandler;
 
+import br.com.currencyconverter.infra.provider.security.JwtTokenProvider.InvalidJWTAuthenticationException;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,7 +16,7 @@ import static org.springframework.http.HttpStatus.*;
 @RestControllerAdvice
 public class ValidationErrorHandlers {
 
-    @ResponseStatus(BAD_REQUEST)
+    @ResponseStatus(UNPROCESSABLE_ENTITY)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ApiErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
 
@@ -33,7 +35,7 @@ public class ValidationErrorHandlers {
                 .details(detalhes).build();
     }
 
-    @ResponseStatus(BAD_REQUEST)
+    @ResponseStatus(UNPROCESSABLE_ENTITY)
     @ExceptionHandler(ConstraintViolationException.class)
     public ApiErrorResponse handleConstraintViolationException(ConstraintViolationException exception) {
 
@@ -71,6 +73,26 @@ public class ValidationErrorHandlers {
     public ApiErrorResponse handleException(Exception exception) {
         return ApiErrorResponse.builder()
                 .message("An Unexpected Error Occurred!")
+                .detailedMessage(exception.getMessage())
+                .build();
+    }
+
+    @ResponseStatus(FORBIDDEN)
+    @ExceptionHandler(InvalidJWTAuthenticationException.class)
+    public ApiErrorResponse handleInvalidJWTAuthenticationException(InvalidJWTAuthenticationException exception) {
+
+        return ApiErrorResponse.builder()
+                .message("Failed when authenticate!")
+                .detailedMessage(exception.getMessage())
+                .build();
+    }
+
+    @ResponseStatus(NOT_FOUND)
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ApiErrorResponse handleUsernameNotFoundException(UsernameNotFoundException exception) {
+
+        return ApiErrorResponse.builder()
+                .message("User not found!")
                 .detailedMessage(exception.getMessage())
                 .build();
     }

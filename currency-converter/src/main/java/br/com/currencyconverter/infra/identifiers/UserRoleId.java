@@ -15,38 +15,38 @@ import static java.util.Objects.requireNonNull;
 
 @Getter
 @Embeddable
-public class UserId implements Serializable {
+public class UserRoleId implements Serializable {
 
     @Serial
-    private static final long serialVersionUID = 5540238512721688983L;
+    private static final long serialVersionUID = -1558964573399317176L;
 
     public static final String ATTRIBUTE = "id";
 
     @JsonValue
     private final UUID id;
 
-    private UserId() {
+    private UserRoleId() {
         this.id = null;
     }
 
-    private UserId(UUID id) {
+    private UserRoleId(UUID id) {
         this.id = requireNonNull(id);
     }
 
-    public static UserId generate() {
-        return new UserId(UUID.randomUUID());
+    public static UserRoleId generate() {
+        return new UserRoleId(UUID.randomUUID());
     }
 
     @JsonCreator
-    public static UserId from(String id) {
-        return new UserId(UUID.fromString(id));
+    public static UserRoleId from(UUID id) {
+        return new UserRoleId(id);
     }
 
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
-        UserId userId = (UserId) object;
+        UserRoleId userId = (UserRoleId) object;
         return Objects.equals(id, userId.id);
     }
 

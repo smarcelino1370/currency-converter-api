@@ -1,7 +1,7 @@
 package br.com.currencyconverter.util;
 
-import br.com.currencyconverter.infra.service.CurrencyConversionService;
-import br.com.currencyconverter.infra.service.ExternalApiProperties;
+import br.com.currencyconverter.infra.provider.currencyconversion.CurrencyConversionProvider;
+import br.com.currencyconverter.infra.provider.currencyconversion.ExternalApiProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -49,10 +49,10 @@ class CurrencyConverterTestConfiguration {
 
     @Primary
     @Bean
-    CurrencyConversionService currencyConversionService() throws IOException, InterruptedException {
+    CurrencyConversionProvider currencyConversionService() throws IOException, InterruptedException {
         MockitoAnnotations.openMocks(this);
 
-        CurrencyConversionService currencyConversionService = new CurrencyConversionService(httpClient, externalApiProperties, objectMapper);
+        CurrencyConversionProvider currencyConversionProvider = new CurrencyConversionProvider(httpClient, externalApiProperties, objectMapper);
 
         doReturn("http://api.mock.io?access_key=mock&base=EUR").when(externalApiProperties).getFullUrl();
 
@@ -62,7 +62,7 @@ class CurrencyConverterTestConfiguration {
 
         doReturn(response).when(httpClient).send(any(), any());
 
-        return currencyConversionService;
+        return currencyConversionProvider;
     }
 
 }

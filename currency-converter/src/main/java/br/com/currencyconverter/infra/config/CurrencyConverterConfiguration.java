@@ -1,4 +1,4 @@
-package br.com.currencyconverter.infra;
+package br.com.currencyconverter.infra.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

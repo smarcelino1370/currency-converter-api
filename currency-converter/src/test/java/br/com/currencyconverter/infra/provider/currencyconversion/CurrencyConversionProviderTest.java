@@ -1,4 +1,4 @@
-package br.com.currencyconverter.infra.service;
+package br.com.currencyconverter.infra.provider.currencyconversion;
 
 import br.com.currencyconverter.infra.vo.ExchangeRate;
 import br.com.currencyconverter.util.IntegrationTest;
@@ -13,14 +13,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @IntegrationTest
-class CurrencyConversionServiceTest {
+class CurrencyConversionProviderTest {
 
     @Autowired
-    private CurrencyConversionService currencyConversionService;
+    private CurrencyConversionProvider currencyConversionProvider;
 
     @Test
     void mustFindAExchangeRate() {
-        ExchangeRate exchangeRate = currencyConversionService.handle(
+        ExchangeRate exchangeRate = currencyConversionProvider.handle(
                 Monetary.getCurrency("BRL"),
                 Monetary.getCurrency("USD")
         );
