@@ -1,5 +1,6 @@
 package br.com.currencyconverter.infra.vo;
 
+import br.com.currencyconverter.infra.identifiers.UserId;
 import br.com.currencyconverter.infra.vo.Token.TokenBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -19,6 +20,7 @@ class TokenTest {
     @BeforeEach
     void beforeEach() {
         this.builder = Token.builder()
+                .id(UserId.generate())
                 .username("user")
                 .authenticated()
                 .created(DATE)

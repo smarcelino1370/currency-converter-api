@@ -5,6 +5,7 @@ import br.com.currencyconverter.infra.identifiers.UserId;
 import org.springframework.data.repository.Repository;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends Repository<User, UserId> {
@@ -22,4 +23,6 @@ public interface UserRepository extends Repository<User, UserId> {
     }
 
     Optional<User> findById(UserId userId);
+
+    List<User> findAll();
 }

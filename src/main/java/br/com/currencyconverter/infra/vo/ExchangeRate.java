@@ -20,8 +20,6 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Map;
-import java.util.Objects;
-import java.util.StringJoiner;
 
 import static java.math.RoundingMode.HALF_EVEN;
 import static java.util.Objects.isNull;
@@ -61,32 +59,6 @@ public class ExchangeRate implements Serializable {
 
     public MonetaryAmount getDestinationAmount(BigDecimal amount) {
         return Money.of(amount.multiply(this.rate), this.destination);
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-        ExchangeRate that = (ExchangeRate) object;
-        return Objects.equals(origin, that.origin)
-                && Objects.equals(destination, that.destination)
-                && Objects.equals(rate, that.rate)
-                && Objects.equals(transactionDate, that.transactionDate);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(origin, destination, rate, transactionDate);
-    }
-
-    @Override
-    public String toString() {
-        return new StringJoiner(", ", ExchangeRate.class.getSimpleName() + "[", "]")
-                .add("origin=" + origin)
-                .add("destination=" + destination)
-                .add("rate=" + rate)
-                .add("transactionDate=" + transactionDate)
-                .toString();
     }
 
     public static class ExchangeRateBuilder {

@@ -7,7 +7,6 @@ import lombok.Getter;
 
 import java.io.Serial;
 import java.util.Objects;
-import java.util.StringJoiner;
 import java.util.UUID;
 
 import static java.util.Objects.requireNonNull;
@@ -50,12 +49,5 @@ public class TransactionConversionId extends WrapperId<UUID> {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
-    }
-
-    @Override
-    public String toString() {
-        return new StringJoiner(", ", TransactionConversionId.class.getSimpleName() + "[", "]")
-                .add("id=" + id)
-                .toString();
     }
 }

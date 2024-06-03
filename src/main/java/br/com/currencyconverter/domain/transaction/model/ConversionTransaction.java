@@ -11,8 +11,6 @@ import lombok.NoArgsConstructor;
 import javax.money.MonetaryAmount;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Objects;
-import java.util.StringJoiner;
 
 import static java.util.Objects.requireNonNull;
 import static lombok.AccessLevel.PRIVATE;
@@ -63,28 +61,5 @@ public class ConversionTransaction {
 
     public LocalDateTime getTransactionDate() {
         return this.getExchangeRate().getTransactionDate();
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-        ConversionTransaction that = (ConversionTransaction) object;
-        return Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
-    }
-
-    @Override
-    public String toString() {
-        return new StringJoiner(", ", ConversionTransaction.class.getSimpleName() + "[", "]")
-                .add("id=" + id)
-                .add("userId=" + userId)
-                .add("exchangeRate=" + exchangeRate)
-                .add("amount=" + amount)
-                .toString();
     }
 }

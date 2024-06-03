@@ -24,6 +24,9 @@ O propósito desta API é fornecer uma solução simples e eficiente para realiz
 - **Execução do JAR**: Execute o JAR gerado na pasta target com o comando java -jar currency-converter-api.jar.
 - **Acessando a API**: A API estará disponível em http://localhost:8080/api.
 
+## Aplicação pode ser observada em 
+- https://currencyconverterapi-staging-4ec985f3b646.herokuapp.com/swagger-ui/index.html
+
 ## Endpoints
 ### Sign In
 - **Endpoint**: `v1/auth/signin`
@@ -50,6 +53,10 @@ O propósito desta API é fornecer uma solução simples e eficiente para realiz
   ```
 - **Resposta**: Retorna o id do Usuário Registrado.
 
+### Listar todos os Usuários
+- **Endpoint**: `v1/user`
+- **Método**: `GET`
+- **Resposta**: Retorna uma lista com todos os Usuários cadastrados.
 ### Conversão de Moedas
 
 - **Endpoint**: `v1/conversion/convert/{userId}`

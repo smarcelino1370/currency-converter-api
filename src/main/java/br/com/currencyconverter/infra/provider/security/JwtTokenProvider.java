@@ -8,7 +8,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,10 +17,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-
-import static java.util.Optional.ofNullable;
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @RequiredArgsConstructor
 @Service
@@ -37,6 +32,7 @@ public class JwtTokenProvider {
         var accessToken = generateAccessToken(user.getUsername(), user.getAuthorities(), now, expiresAt);
 
         return Token.builder()
+                .id(user.getId())
                 .username(user.getUsername())
                 .authenticated()
                 .created(now)
@@ -70,15 +66,10 @@ public class JwtTokenProvider {
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
-    public Optional<String> resolveToken(HttpServletRequest request) {
-        return ofNullable(request.getHeader(AUTHORIZATION))
-                .map(bearerToken -> bearerToken.substring("Bearer ".length()));
-    }
-
     public boolean validate(String token) {
         try {
-            DecodedJWT decodedJWT = decodedToken(token);
-            return !decodedJWT.getExpiresAt().before(new Date());
+            decodedToken(token);
+            return true;
         } catch (Exception e) {
             return false;
         }

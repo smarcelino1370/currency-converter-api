@@ -1,12 +1,12 @@
 package br.com.currencyconverter.infra.vo;
 
+import br.com.currencyconverter.infra.identifiers.UserId;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
-import java.util.StringJoiner;
 
 import static java.util.Objects.requireNonNull;
 import static lombok.AccessLevel.PRIVATE;
@@ -14,6 +14,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Getter
 public class Token {
 
+    private final UserId id;
     private final String username;
     private final boolean authenticated;
     private final LocalDateTime created;
@@ -21,6 +22,7 @@ public class Token {
     private final String accessToken;
 
     private Token(TokenBuilder builder) {
+        this.id = requireNonNull(builder.id);
         this.username = requireNonNull(builder.username);
         this.authenticated = builder.authenticated;
         this.created = requireNonNull(builder.created);
@@ -32,26 +34,20 @@ public class Token {
         return new TokenBuilder();
     }
 
-    @Override
-    public String toString() {
-        return new StringJoiner(", ", Token.class.getSimpleName() + "[", "]")
-                .add("username='" + username + "'")
-                .add("authenticated=" + authenticated)
-                .add("created=" + created)
-                .add("expiresAt=" + expiresAt)
-                .add("accessToken='" + accessToken + "'")
-                .toString();
-    }
-
     @NoArgsConstructor(access = PRIVATE)
     public static class TokenBuilder {
 
+        private UserId id;
         private String username;
         private boolean authenticated = false;
         private LocalDateTime created;
         private LocalDateTime expiresAt;
         private String accessToken;
 
+        public TokenBuilder id(UserId id) {
+            this.id = id;
+            return this;
+        }
 
         public TokenBuilder username(String username) {
             this.username = username;
@@ -90,5 +86,6 @@ public class Token {
         public Token build() {
             return new Token(this);
         }
+
     }
 }

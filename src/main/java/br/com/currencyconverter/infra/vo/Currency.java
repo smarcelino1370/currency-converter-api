@@ -7,9 +7,6 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 
-import java.util.Objects;
-import java.util.StringJoiner;
-
 import static java.util.Objects.requireNonNull;
 
 public class Currency {
@@ -29,25 +26,5 @@ public class Currency {
     @JsonIgnore
     public CurrencyUnit getCurrencyUnit() {
         return Monetary.getCurrency(this.code);
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-        Currency currency = (Currency) object;
-        return Objects.equals(code, currency.code);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(code);
-    }
-
-    @Override
-    public String toString() {
-        return new StringJoiner(", ", Currency.class.getSimpleName() + "[", "]")
-                .add("code='" + code + "'")
-                .toString();
     }
 }

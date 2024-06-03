@@ -101,4 +101,16 @@ class ExchangeRateTest {
 
         assertThrows(InvalidDateException.class, builderWithoutAValidDate::build);
     }
+
+    @Test
+    void mustThrowExceptionWhenExchangeRateWithoutRates() {
+
+        ExchangeRateBuilder builderWithoutAValidDate = ExchangeRate.builder()
+                .timestamp(1717189194L)
+                .rates(null)
+                .origin(Monetary.getCurrency("BRL"))
+                .destination(Monetary.getCurrency("USD"));
+
+        assertThrows(CurrencyWithoutExchangeRateException.class, builderWithoutAValidDate::build);
+    }
 }
