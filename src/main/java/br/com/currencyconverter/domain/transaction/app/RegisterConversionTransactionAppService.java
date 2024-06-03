@@ -27,7 +27,7 @@ public class RegisterConversionTransactionAppService implements RegisterConversi
         log.info("calling handle(RegisterConversionTransaction, UserId) for UserId {}", userId);
 
         User user = userRepository.get(userId);
-        ExchangeRate exchangeRate = this.currencyConversionDomainService.handle(cmd.getOrigin(), cmd.getDestination());
+        ExchangeRate exchangeRate = this.currencyConversionDomainService.handle(cmd.getOrigin().getCurrencyUnit(), cmd.getDestination().getCurrencyUnit());
 
         ConversionTransaction conversionTransaction = ConversionTransaction.builder()
                 .userId(user.getId())

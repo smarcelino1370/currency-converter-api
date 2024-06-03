@@ -3,13 +3,13 @@ package br.com.currencyconverter.domain.transaction.usecase;
 import br.com.currencyconverter.domain.transaction.model.ConversionTransaction;
 import br.com.currencyconverter.infra.identifiers.TransactionConversionId;
 import br.com.currencyconverter.infra.identifiers.UserId;
+import br.com.currencyconverter.infra.vo.Currency;
+import br.com.currencyconverter.infra.vo.Money;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
 
-import javax.money.CurrencyUnit;
-import javax.money.MonetaryAmount;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -21,10 +21,10 @@ public interface RegisterConversionTransactionUseCase {
     class RegisterConversionTransaction {
 
         @NotNull(message = "Origin Currency must be informed!")
-        CurrencyUnit origin;
+        Currency origin;
 
         @NotNull(message = "Destination Currency must be informed!")
-        CurrencyUnit destination;
+        Currency destination;
 
         @NotNull(message = "Amount must be informed!")
         BigDecimal amount;
@@ -37,8 +37,8 @@ public interface RegisterConversionTransactionUseCase {
         private final TransactionConversionId id;
         private final UserId userId;
 
-        private final MonetaryAmount origin;
-        private final MonetaryAmount destination;
+        private final Money origin;
+        private final Money destination;
 
         private final BigDecimal rate;
         private final LocalDateTime transactionDate;
@@ -47,8 +47,8 @@ public interface RegisterConversionTransactionUseCase {
             return ConversionTransactionRegistered.builder()
                     .id(conversionTransaction.getId())
                     .userId(conversionTransaction.getUserId())
-                    .origin(conversionTransaction.getOriginAmount())
-                    .destination(conversionTransaction.getDestinationAmount())
+                    .origin(Money.from(conversionTransaction.getOriginAmount()))
+                    .destination(Money.from(conversionTransaction.getDestinationAmount()))
                     .rate(conversionTransaction.getRate())
                     .transactionDate(conversionTransaction.getTransactionDate())
                     .build();
